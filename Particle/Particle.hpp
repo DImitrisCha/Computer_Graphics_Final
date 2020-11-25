@@ -30,6 +30,7 @@ public:
     float get_radius();
     float get_start_time();
     void set_start_time(float);
+    bool checkParticleCollision(Particle &);
 };
 
 #endif /* Particle_hpp */

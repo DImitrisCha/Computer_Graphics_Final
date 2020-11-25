@@ -109,6 +109,18 @@ void drawScene(void)
         glPopMatrix();
     }
     
+    for(int j = 0; j < particles.size(); j++){
+        for (int k = 0; k < particles.size(); k++){
+            if (j == k){
+                continue;
+            }
+            else{
+                //std::cout<<particles[j]->checkParticleCollision(*particles[k]);
+                particles[j]->checkParticleCollision(*particles[k]);
+            }
+        }
+    }
+    
     glutSwapBuffers();
     
     float time_final = glutGet(GLUT_ELAPSED_TIME); //records Time Elapsed at end of frame

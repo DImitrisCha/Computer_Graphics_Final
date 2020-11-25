@@ -61,7 +61,7 @@ Particle::Particle(float t)
     }
 //    m_pos[0] *= 18; // spreads out the randomly generated x value
     m_vel[0] = -0.05f + 0.1f * randVal;
-    m_vel[1] = 0.1f + 0.1f * randVal;
+    m_vel[1] = 0.1f + 1 * randVal;
     m_acc[1] = -0.01f;
     m_color[2] = randVal;
     
@@ -95,4 +95,17 @@ float Particle::get_start_time(){
 }
 void Particle::set_start_time(float t){
     m_start_time = t;
+}
+bool Particle::checkParticleCollision(Particle &two){
+    
+    float left = pow((this -> m_pos[0] - two.m_pos[0]),2) + pow((this -> m_pos[1] - two.m_pos[1]),2) + pow((this -> m_pos[2] - two.m_pos[2]),2);
+    
+    float right = pow((this->get_radius() + two.get_radius()),2);
+    
+    if (left > right){
+        return false;
+    }
+    else{
+        return true;
+    }
 }

@@ -10,6 +10,7 @@ Date: October 12, 2020
 #define Particle_hpp
 #include <stdio.h>
 #include <cmath>
+#include "Wall.hpp"
 
 class Particle{
 private:
@@ -30,7 +31,9 @@ public:
     float get_radius();
     float get_start_time();
     void set_start_time(float);
-    bool checkParticleCollision(Particle &);
+    bool checkCollision(Particle &);
+    bool checkCollision(Wall &);
+    float checkParticleBoarderCollision();
 };
 
 #endif /* Particle_hpp */

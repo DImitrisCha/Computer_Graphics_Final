@@ -65,7 +65,7 @@ float Particle::get_start_time(){
 void Particle::set_start_time(float t){
     m_start_time = t;
 }
-bool Particle::checkParticleCollision(Particle &two){
+bool Particle::checkCollision(Particle &two){
     
     float left = pow((this -> m_pos[0] - two.m_pos[0]),2) + pow((this -> m_pos[1] - two.m_pos[1]),2) + pow((this -> m_pos[2] - two.m_pos[2]),2);
     
@@ -77,4 +77,51 @@ bool Particle::checkParticleCollision(Particle &two){
     else{
         return true;
     }
+}
+bool Particle::checkCollision(Wall &two){
+    bool collision = false;
+    float* wall = two.get_pos();
+    
+    if(two.get_orientation()){
+        //checks diff in y values for a horizontal wall
+        if(abs(wall[1] - m_pos[1]) < m_radius){
+            collision = true;
+            
+            m_vel[1] = m_vel[1] * -1;
+            move();
+        }
+    }
+    else{
+        //checks diff in x values for a vertical wall
+        if(abs(wall[0] - m_pos[0]) < m_radius){
+            collision = true;
+            
+            m_vel[0] = m_vel[0] * -1;
+            move();
+        }
+    }
+    
+    return collision;
+}
+
+float Particle::checkParticleBoarderCollision(){
+  if (this->m_pos[0] <= -40){
+    //add code to manipulate its direction, velocity etc
+    return 0.0;
+  }
+  else if (this->m_pos[1] <= -40){
+    //add code to manipulate its direction, velocity etc
+    return 1.0;
+  }
+  else if (this->m_pos[0] >= 90){
+    //add code to manipulate its direction, velocity etc
+    return 2.0;
+  }
+  else if (this->m_pos[1] >= 90){
+    //add code to manipulate its direction, velocity etc
+    return 3.0;
+  }
+  else{
+    return 4.0;
+  }
 }

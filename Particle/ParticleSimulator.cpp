@@ -17,7 +17,6 @@ Feedback: There was a lot of self-teaching and trial and error which was fun but
 
 #include "Particle.hpp"
 #include <vector>
-w
 #ifdef __APPLE__
 #  include <GL/glew.h>
 #  include <GL/freeglut.h>
@@ -41,6 +40,7 @@ int avg_fps = 60; float fps = 0; int frames = 0;
 float t = 0;
 float delta_time;
 vector<Particle*> particles;
+vector<Wall*> walls;
 GLUquadricObj *disk = gluNewQuadric();
 
 // Initialization
@@ -72,7 +72,7 @@ void drawScene(void)
     
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(90.f, win_width / win_height, .1f, 500.f);
+    glOrtho(-10, 10, -10, 10, .1f, 500.0f);
     gluLookAt(0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glPolygonMode(GL_LINE, GL_FILL);
@@ -83,6 +83,21 @@ void drawScene(void)
         float* curr_location = particles[i]->move();
         float* curr_color = particles[i]->get_color();
             
+        for (int j = 0; j < walls.size(); j++) {
+            if(particles[i]->checkCollision(*walls[j]))
+                std::cout << "particle: (" << curr_location[0] << ", " << curr_location[1] << ") wall: (" << walls[j]->get_pos()[0] << ", " << walls[j]->get_pos()[1] << ") wall collision \n";
+        }
+        
+        for (int k = 0; k < particles.size(); k++){
+            if (i == k){
+                continue;
+            }
+            else{
+                if(particles[i]->checkCollision(*particles[k]))
+                    std::cout << "particle collision \n";
+            }
+        }
+        
         glPushMatrix();
             
         // renders the particle according to its instance variables
@@ -91,17 +106,6 @@ void drawScene(void)
         gluDisk(disk, 0.0, particles[i]->get_radius(), 20, 20);
             
         glPopMatrix();
-    }
-    
-    for(int j = 0; j < particles.size(); j++){
-        for (int k = 0; k < particles.size(); k++){
-            if (j == k){
-                continue;
-            }
-            else{
-                if(particles[j]->checkParticleCollision(*particles[k])) std::cout<<particles[j]->checkParticleCollision(*particles[k])<<"\n";
-            }
-        }
     }
     
     glutSwapBuffers();
@@ -142,17 +146,22 @@ int main(int argc, char* argv[])
     glutInitWindowSize(win_width, win_height);
 
     glutCreateWindow("ParticleSimulator");
-
+    
     init();
     
-    float pos_1[3] = {-10.0f, 0.0f, 0.0f};
+    walls.push_back(new Wall((float[3]) {0.0f, 10.0f, 0.0f}, true)); //top
+    walls.push_back(new Wall((float[3]) {10.0f, 0.0f, 0.0f}, false)); //right
+    walls.push_back(new Wall((float[3]) {0.0f, -10.0f, 0.0f}, true)); //bottm
+    walls.push_back(new Wall((float[3]) {-10.0f, 0.0f, 0.0f}, false)); //left
+    
+    float pos_1[3] = {-9.0f, 0.0f, 0.0f};
     float vel_1[3] = {0.3f, 0.0f, 0.0f};
     float acc_1[3] = {0.0f, -0.01f, 0.0f};
     float color_1[3] = {0, 0, 1};
     float r_1 = 0.5f;
     particles.push_back(new Particle(pos_1, vel_1, acc_1, color_1, r_1));
     
-    float pos_2[3] = {10.0f, 0.0f, 0.0f};
+    float pos_2[3] = {9.0f, 0.0f, 0.0f};
     float vel_2[3] = {-0.3f, 0.0f, 0.0f};
     float acc_2[3] = {0.0f, -0.01f, 0.0f};
     float color_2[3] = {1, 0, 0};
@@ -167,4 +176,3 @@ int main(int argc, char* argv[])
 
     return 0;
 }
-

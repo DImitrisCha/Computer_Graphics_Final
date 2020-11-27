@@ -11,6 +11,7 @@
 		662A62E924F6E8450044670B /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E7B1E824F6DB7900846AB7 /* GLUT.framework */; };
 		662A62EC24F6E8470044670B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E7B1E724F6DB7900846AB7 /* OpenGL.framework */; };
 		66B601CE252FD80F00786C57 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66B601CC252FD80F00786C57 /* Particle.cpp */; };
+		66FE10A825716C0B0009E200 /* Wall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66FE10A625716C0B0009E200 /* Wall.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +33,8 @@
 		66E7B1DA24F6DB1100846AB7 /* Homework 2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Homework 2"; sourceTree = BUILT_PRODUCTS_DIR; };
 		66E7B1E724F6DB7900846AB7 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		66E7B1E824F6DB7900846AB7 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		66FE10A625716C0B0009E200 /* Wall.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Wall.cpp; sourceTree = "<group>"; };
+		66FE10A725716C0B0009E200 /* Wall.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Wall.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +56,8 @@
 				66B601CC252FD80F00786C57 /* Particle.cpp */,
 				66B601CD252FD80F00786C57 /* Particle.hpp */,
 				6619BB6C2569B75E00CDE24B /* ParticleSimulator.cpp */,
+				66FE10A625716C0B0009E200 /* Wall.cpp */,
+				66FE10A725716C0B0009E200 /* Wall.hpp */,
 			);
 			path = Particle;
 			sourceTree = "<group>";
@@ -141,6 +146,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66FE10A825716C0B0009E200 /* Wall.cpp in Sources */,
 				6619BB6D2569B75E00CDE24B /* ParticleSimulator.cpp in Sources */,
 				66B601CE252FD80F00786C57 /* Particle.cpp in Sources */,
 			);

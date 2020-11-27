@@ -23,7 +23,7 @@ private:
     float m_start_time;
 public:
     Particle();
-    Particle(float);
+    Particle(float*, float*, float*, float*, float);
     ~Particle();
     float* move();
     float* get_color();

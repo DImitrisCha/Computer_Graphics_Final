@@ -10,7 +10,6 @@
 		6619BB6D2569B75E00CDE24B /* ParticleSimulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6619BB6C2569B75E00CDE24B /* ParticleSimulator.cpp */; };
 		662A62E924F6E8450044670B /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E7B1E824F6DB7900846AB7 /* GLUT.framework */; };
 		662A62EC24F6E8470044670B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66E7B1E724F6DB7900846AB7 /* OpenGL.framework */; };
-		6650BDB2256C34E8000B07DD /* Vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6650BDB0256C34E8000B07DD /* Vector.cpp */; };
 		66B601CE252FD80F00786C57 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66B601CC252FD80F00786C57 /* Particle.cpp */; };
 /* End PBXBuildFile section */
 
@@ -28,8 +27,6 @@
 
 /* Begin PBXFileReference section */
 		6619BB6C2569B75E00CDE24B /* ParticleSimulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleSimulator.cpp; sourceTree = "<group>"; };
-		6650BDB0256C34E8000B07DD /* Vector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector.cpp; sourceTree = "<group>"; };
-		6650BDB1256C34E8000B07DD /* Vector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vector.hpp; sourceTree = "<group>"; };
 		66B601CC252FD80F00786C57 /* Particle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Particle.cpp; sourceTree = "<group>"; };
 		66B601CD252FD80F00786C57 /* Particle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Particle.hpp; sourceTree = "<group>"; };
 		66E7B1DA24F6DB1100846AB7 /* Homework 2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Homework 2"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -55,8 +52,6 @@
 			children = (
 				66B601CC252FD80F00786C57 /* Particle.cpp */,
 				66B601CD252FD80F00786C57 /* Particle.hpp */,
-				6650BDB0256C34E8000B07DD /* Vector.cpp */,
-				6650BDB1256C34E8000B07DD /* Vector.hpp */,
 				6619BB6C2569B75E00CDE24B /* ParticleSimulator.cpp */,
 			);
 			path = Particle;
@@ -148,7 +143,6 @@
 			files = (
 				6619BB6D2569B75E00CDE24B /* ParticleSimulator.cpp in Sources */,
 				66B601CE252FD80F00786C57 /* Particle.cpp in Sources */,
-				6650BDB2256C34E8000B07DD /* Vector.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

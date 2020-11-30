@@ -65,6 +65,12 @@ void calculateFPS(){
     }
 }
 
+void createParticles(int n){
+    for(int i = 0; i < n; i++){
+        particles.push_back(new Particle()); //add new particle to the vector
+    }
+}
+
 // Drawing routine
 void drawScene(void)
 {
@@ -154,25 +160,26 @@ int main(int argc, char* argv[])
     walls.push_back(new Wall((float[3]) {0.0f, -10.0f, 0.0f}, true)); //bottm
     walls.push_back(new Wall((float[3]) {-10.0f, 0.0f, 0.0f}, false)); //left
     
+    float gravity = -0.01f;
     float pos_1[3] = {-9.0f, 0.0f, 0.0f};
     float vel_1[3] = {0.3f, 0.0f, 0.0f};
-    float acc_1[3] = {0.0f, -0.01f, 0.0f};
     float color_1[3] = {0, 0, 1};
     float r_1 = 0.5f;
-    particles.push_back(new Particle(pos_1, vel_1, acc_1, color_1, r_1));
-    
+    particles.push_back(new Particle(pos_1, vel_1, gravity, color_1, r_1));
+
     float pos_2[3] = {9.0f, 0.0f, 0.0f};
     float vel_2[3] = {-0.3f, 0.0f, 0.0f};
-    float acc_2[3] = {0.0f, -0.01f, 0.0f};
     float color_2[3] = {1, 0, 0};
-    float r_2 = 0.5f;
-    particles.push_back(new Particle(pos_2, vel_2, acc_2, color_2, r_2));
+    float r_2 = 0.6f;
+    particles.push_back(new Particle(pos_2, vel_2, gravity, color_2, r_2));
     
+    
+//    createParticles(5); // initial 'batch' of particles
     glutDisplayFunc(drawScene);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
     glutIdleFunc(idle);
     glutMainLoop();
-
+    
     return 0;
 }

@@ -14,23 +14,22 @@ Date: October 12, 2020
 
 class Particle{
 private:
-    float time;
     float m_radius;
+    float m_gravity;
     float* m_pos;
     float* m_vel;
-    float* m_acc;
     float* m_color;
-    float m_init_h;
     float m_start_time;
 public:
     Particle();
-    Particle(float*, float*, float*, float*, float);
+    Particle(float*, float*, float, float*, float);
     ~Particle();
     float* move();
     float* get_color();
     float get_radius();
-    float get_start_time();
-    void set_start_time(float);
+    float* get_position();
+    void calculate_vel(Particle &two);
+    void set_vel(float, float);
     bool checkCollision(Particle &);
     bool checkCollision(Wall &);
     float checkParticleBoarderCollision();

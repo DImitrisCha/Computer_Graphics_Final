@@ -137,11 +137,13 @@ void idle() {
 
 void keyboard(unsigned char key, int x, int y) {
     switch (key) {
-    case 27: // Escape key
-        exit(0); break;
-        case 'f': for (int i = 0; i < particles.size(); i++) {
-            particles[i]->set_vel(0.5, 0.8);
-        }
+        case 27: // Escape key
+            exit(0); break;
+        case 'f':
+            float randMax =  1 / (float)RAND_MAX;
+            for (int i = 0; i < particles.size(); i++) {
+                particles[i]->set_vel(randMax * (float)rand(), randMax * (float)rand());
+            }
     }
     
     glutPostRedisplay();

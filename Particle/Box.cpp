@@ -7,22 +7,18 @@
 //
 
 #include "Box.hpp"
-#include "Particle.hpp"
 #include <iostream>
-#include <set>
 
 using namespace std;
 
 
-Box::Box(float x_left, float x_right, float y_bottom, float y_top, set<Particle> included){
-    
+Box::Box(float x_left, float x_right, float y_bottom, float y_top, set<Particle*> included){
     m_x_left = x_left;
     m_x_right = x_right;
     m_y_bottom = y_bottom;
     m_y_top = y_top;
     
     m_included = included;
-    
 }
 
 bool Box::in_bounds(float loc_x, float loc_y){

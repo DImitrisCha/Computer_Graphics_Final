@@ -30,6 +30,7 @@ public:
     float* get_position();
     void calculate_vel(Particle &two);
     void set_vel(float, float);
+    void set_gravity(float);
     bool checkCollision(Particle &);
     bool checkCollision(Wall &);
     float checkParticleBoarderCollision();

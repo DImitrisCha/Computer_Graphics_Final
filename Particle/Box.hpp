@@ -9,8 +9,11 @@
 #ifndef Box_hpp
 #define Box_hpp
 #include <set>
-
+#include <map>
+#include <iostream>
 #include <stdio.h>
+#include "Particle.hpp"
+
 class Box {
 private:
     float m_x_left;
@@ -18,10 +21,10 @@ private:
     float m_y_bottom;
     float m_y_top;
     
-    set m_included;
+    std::set<Particle*> m_included;
     
 public:
-    Box(float, float, float, float, set);
+    Box(float, float, float, float, std::set<Particle*>);
     
     bool in_bounds(float,float);
 };

@@ -52,10 +52,11 @@ Particle::~Particle()
     delete[] m_color;
 }
 float* Particle::move(void){
-    m_vel[1] += m_gravity;
-    
     m_pos[0] += m_vel[0];
-    m_pos[1] += m_vel[1];
+    
+    if((m_pos[1] - m_radius) + m_vel[1] >= 0)
+        m_vel[1] += m_gravity;
+        m_pos[1] += m_vel[1];
     
     return m_pos;
 }
@@ -70,6 +71,9 @@ float* Particle::get_position(){
 }
 void Particle::set_vel(float vel_x, float vel_y){
     m_vel[0] = vel_x; m_vel[1] = vel_y;
+}
+void Particle::set_gravity(float g){
+    m_gravity = g;
 }
 void Particle::calculate_vel(Particle &two){
     float m_1 = m_radius; float m_2 = two.get_radius();
@@ -93,6 +97,7 @@ bool Particle::checkCollision(Particle &two){
     }
     else{
         calculate_vel(two);
+        move(); two.move();
         return true;
     }
 }
@@ -102,30 +107,26 @@ bool Particle::checkCollision(Wall &two){
     
     if(two.get_orientation()){
         //checks diff in y values for a horizontal wall
-        if(abs(wall[1] - m_pos[1]) < m_radius){
+        if(abs(wall[1] - m_pos[1]) <= m_radius){
             collision = true;
-            if(abs(m_vel[1]) > abs(m_gravity)){
-                m_vel[0] = m_vel[0] * 0.9;
+            if (abs(m_vel[1]) > abs(m_gravity))
                 m_vel[1] = m_vel[1] * -1;
-                move();
-            }
-            else{
+            else
                 m_vel[1] = 0;
-                m_gravity = 0;
-            }
+            
+            m_vel[0] = m_vel[0] * 0.9;
+            move();
         }
     }
     else{
         //checks diff in x values for a vertical wall
-        if(abs(wall[0] - m_pos[0]) < m_radius){
+        if(abs(wall[0] - m_pos[0]) <= m_radius){
             collision = true;
-            if(abs(m_vel[0]) > abs(m_gravity)){
+            if (abs(m_vel[0]) > abs(m_gravity))
                 m_vel[0] = m_vel[0] * -1;
-                move();
-            }
-            else{
-                m_vel[0] = 0; //deaccelerate function?
-            }
+            else
+                m_vel[0] = 0;
+            move();
         }
     }
     

@@ -42,6 +42,7 @@ float t = 0;
 float delta_time;
 vector<Particle*> particles;
 vector<Wall*> walls;
+vector<Box*> regions;
 GLUquadricObj *disk = gluNewQuadric();
 
 // Initialization
@@ -89,15 +90,24 @@ void drawScene(void)
     for (int i = 0; i < particles.size(); i++) {
         float* curr_location = particles[i]->move();
         float* curr_color = particles[i]->get_color();
-            
+        
+        for(int j = 0; j < regions.size(); j++){
+            regions[j]->update_box(particles[i]);
+        }
+              
+        int region = particles[i]->get_region();
+        set<Particle*> close_particles = regions[region]->get_included();
+        std::cout << close_particles.size() << "\n";
+        
+        
         for (int j = 0; j < walls.size(); j++) {
             particles[i]->checkCollision(*walls[j]);
         }
         
-        for (int k = 0; k < particles.size(); k++){
-            if (k != i)
-                particles[i]->checkCollision(*particles[k]);
+        for (auto particle: close_particles){
+            particles[i]->checkCollision(*particle);
         }
+
         
         glPushMatrix();
             
@@ -155,24 +165,29 @@ int main(int argc, char* argv[])
     
     init();
     
+    regions.push_back(new Box(0.0, 10.0, 10.0, 20.0, 0)); //top-left
+    regions.push_back(new Box(10.0, 20.0, 10.0, 20.0, 1)); //top-right
+    regions.push_back(new Box(0.0, 10.0, 0.0, 10.0, 2)); //bot-left
+    regions.push_back(new Box(10.0, 20.0, 0.0, 10.0, 3)); //bot-right
+    
     walls.push_back(new Wall((float[3]) {0.0f, 20.0f, 0.0f}, true)); //top
     walls.push_back(new Wall((float[3]) {20.0f, 0.0f, 0.0f}, false)); //right
     walls.push_back(new Wall((float[3]) {0.0f, 0.0f, 0.0f}, true)); //bottm
     walls.push_back(new Wall((float[3]) {0.0f, 0.0f, 0.0f}, false)); //left
     
-//    float pos_1[3] = {1.0f, 10.0f, 0.0f};
-//    float vel_1[3] = {0.3f, 0.0f, 0.0f};
-//    float color_1[3] = {0, 0, 1};
-//    float r_1 = 0.5f;
-//    particles.push_back(new Particle(pos_1, vel_1, gravity, color_1, r_1));
-//
-//    float pos_2[3] = {19.0f, 10.0f, 0.0f};
-//    float vel_2[3] = {-0.1f, 0.0f, 0.0f};
-//    float color_2[3] = {1, 0, 0};
-//    float r_2 = 0.6f;
-//    particles.push_back(new Particle(pos_2, vel_2, gravity, color_2, r_2));
+    float pos_1[3] = {1.0f, 10.0f, 0.0f};
+    float vel_1[3] = {0.3f, 0.0f, 0.0f};
+    float color_1[3] = {0, 0, 1};
+    float r_1 = 0.5f;
+    particles.push_back(new Particle(pos_1, vel_1, gravity, color_1, r_1));
+
+    float pos_2[3] = {19.0f, 10.0f, 0.0f};
+    float vel_2[3] = {-0.1f, 0.0f, 0.0f};
+    float color_2[3] = {1, 0, 0};
+    float r_2 = 0.6f;
+    particles.push_back(new Particle(pos_2, vel_2, gravity, color_2, r_2));
     
-    createParticles(50); // initial 'batch' of particles
+//    createParticles(50); // initial 'batch' of particles
     glutDisplayFunc(drawScene);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);

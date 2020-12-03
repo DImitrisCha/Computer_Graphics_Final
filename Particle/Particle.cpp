@@ -28,14 +28,16 @@ Particle::Particle()
     m_vel = new float[3];
     m_color = new float[3];
     for(int i = 0; i < 3; i++){
-        m_pos[i] = (float)rand() * randMax - 0.5;
+        m_pos[i] = (float)rand() * randMax;
         m_color[i] = (float)rand() * randMax;
         m_vel[i] = 0.0f;
     }
     m_pos[0] *= 18; // spreads out the randomly generated x value
+    m_pos[1] += 10;
     m_vel[0] = -0.1f + 0.2f * (float)rand() * randMax;
     m_vel[1] = 0.1f + 0.2f * (float)rand() * randMax;
     m_gravity = -0.01f;
+    check_moving();
 }
 Particle::Particle(float* pos, float* vel, float g, float* color, float r)
 {
@@ -44,6 +46,7 @@ Particle::Particle(float* pos, float* vel, float g, float* color, float r)
     m_gravity = g;
     m_color = color;
     m_radius = r;
+    check_moving();
 }
 Particle::~Particle()
 {
@@ -52,16 +55,30 @@ Particle::~Particle()
     delete[] m_color;
 }
 float* Particle::move(void){
+    if(m_moving)
+        m_vel[1] += m_gravity;
+    
+    m_pos[1] += m_vel[1];
     m_pos[0] += m_vel[0];
     
-    if((m_pos[1] - m_radius) + m_vel[1] >= 0)
-        m_vel[1] += m_gravity;
-        m_pos[1] += m_vel[1];
+    if(m_pos[1] < m_radius)
+        m_pos[1] = m_radius;
+    else if(m_pos[1] > 20)
+        m_pos[1] = 20 - m_radius;
+    
+    if(m_pos[0] < m_radius)
+        m_pos[0] = m_radius;
+    else if(m_pos[0] > 20)
+        m_pos[0] = 20 - m_radius;
+    
     
     return m_pos;
 }
 float* Particle::get_color(){
     return m_color;
+}
+float* Particle::get_vel(){
+    return m_vel;
 }
 float Particle::get_radius(){
     return m_radius;
@@ -71,9 +88,16 @@ float* Particle::get_position(){
 }
 void Particle::set_vel(float vel_x, float vel_y){
     m_vel[0] = vel_x; m_vel[1] = vel_y;
+    check_moving();
 }
 void Particle::set_gravity(float g){
     m_gravity = g;
+}
+void Particle::check_moving(){
+    if(m_vel[0] == 0.0f && m_vel[1] == 0.0f)
+        m_moving = false;
+    else
+        m_moving = true;
 }
 void Particle::calculate_vel(Particle &two){
     float m_1 = m_radius; float m_2 = two.get_radius();
@@ -88,7 +112,7 @@ void Particle::calculate_vel(Particle &two){
     two.set_vel(other_vel_x, other_vel_y);
 }
 bool Particle::checkCollision(Particle &two){
-    float left = pow((this -> m_pos[0] - two.m_pos[0]),2) + pow((this -> m_pos[1] - two.m_pos[1]),2) + pow((this -> m_pos[2] - two.m_pos[2]),2);
+    float left = sqrt(pow((this -> m_pos[0] - two.m_pos[0]),2) + pow((this -> m_pos[1] - two.m_pos[1]),2));
     
     float right = pow((this->get_radius() + two.get_radius()),2);
     
@@ -97,7 +121,6 @@ bool Particle::checkCollision(Particle &two){
     }
     else{
         calculate_vel(two);
-        move(); two.move();
         return true;
     }
 }
@@ -105,52 +128,31 @@ bool Particle::checkCollision(Wall &two){
     bool collision = false;
     float* wall = two.get_pos();
     
-    if(two.get_orientation()){
-        //checks diff in y values for a horizontal wall
-        if(abs(wall[1] - m_pos[1]) <= m_radius){
-            collision = true;
-            if (abs(m_vel[1]) > abs(m_gravity))
-                m_vel[1] = m_vel[1] * -1;
-            else
-                m_vel[1] = 0;
-            
-            m_vel[0] = m_vel[0] * 0.9;
-            move();
+    if(m_moving){
+        if(two.get_orientation()){
+            //checks diff in y values for a horizontal wall
+            if(abs(wall[1] - m_pos[1]) <= m_radius){
+                collision = true;
+                if(abs(m_vel[1]) > abs(m_gravity))
+                    m_vel[1] = (m_vel[1] * -1);
+                else
+                    m_vel[1] = 0.0f;
+                
+                if(abs(m_vel[0]) > abs(m_gravity))
+                    m_vel[0] = m_vel[0] * 0.99f;
+                else
+                    m_vel[0] = 0.0f;
+            }
         }
-    }
-    else{
-        //checks diff in x values for a vertical wall
-        if(abs(wall[0] - m_pos[0]) <= m_radius){
-            collision = true;
-            if (abs(m_vel[0]) > abs(m_gravity))
-                m_vel[0] = m_vel[0] * -1;
-            else
-                m_vel[0] = 0;
-            move();
+        else{
+            //checks diff in x values for a vertical wall
+            if(abs(wall[0] - m_pos[0]) <= m_radius){
+                collision = true;
+                m_vel[0] = m_vel[0] * -1.0f;
+            }
         }
     }
     
     return collision;
 }
 
-float Particle::checkParticleBoarderCollision(){
-  if (this->m_pos[0] <= -40){
-    //add code to manipulate its direction, velocity etc
-    return 0.0;
-  }
-  else if (this->m_pos[1] <= -40){
-    //add code to manipulate its direction, velocity etc
-    return 1.0;
-  }
-  else if (this->m_pos[0] >= 90){
-    //add code to manipulate its direction, velocity etc
-    return 2.0;
-  }
-  else if (this->m_pos[1] >= 90){
-    //add code to manipulate its direction, velocity etc
-    return 3.0;
-  }
-  else{
-    return 4.0;
-  }
-}

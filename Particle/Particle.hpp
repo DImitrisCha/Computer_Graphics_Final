@@ -20,6 +20,8 @@ private:
     float* m_vel;
     float* m_color;
     float m_start_time;
+    bool m_moving;
+    void check_moving();
 public:
     Particle();
     Particle(float*, float*, float, float*, float);
@@ -27,13 +29,13 @@ public:
     float* move();
     float* get_color();
     float get_radius();
+    float* get_vel();
     float* get_position();
     void calculate_vel(Particle &two);
     void set_vel(float, float);
     void set_gravity(float);
     bool checkCollision(Particle &);
     bool checkCollision(Wall &);
-    float checkParticleBoarderCollision();
 };
 
 #endif /* Particle_hpp */

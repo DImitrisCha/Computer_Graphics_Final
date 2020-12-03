@@ -21,7 +21,6 @@ Particle::Particle()
 {
     float randMax =  1 / (float)RAND_MAX;
     m_radius = .2 + randMax * (float)rand() * 0.2;
-    m_start_time = 0;
     
     // assigns random values to (x,y,z) and (r,g,b)
     m_pos = new float[3];
@@ -37,6 +36,7 @@ Particle::Particle()
     m_vel[0] = -0.1f + 0.2f * (float)rand() * randMax;
     m_vel[1] = 0.1f + 0.2f * (float)rand() * randMax;
     m_gravity = -0.01f;
+    m_region = -1; m_prev_region = -1;
     check_moving();
 }
 Particle::Particle(float* pos, float* vel, float g, float* color, float r)
@@ -46,6 +46,7 @@ Particle::Particle(float* pos, float* vel, float g, float* color, float r)
     m_gravity = g;
     m_color = color;
     m_radius = r;
+    m_region = -1; m_prev_region = -1;
     check_moving();
 }
 Particle::~Particle()
@@ -92,6 +93,16 @@ void Particle::set_vel(float vel_x, float vel_y){
 }
 void Particle::set_gravity(float g){
     m_gravity = g;
+}
+int Particle::get_region(){
+    return m_region;
+}
+int Particle::get_prev_region(){
+    return m_prev_region;
+}
+void Particle::set_region(int region){
+    m_prev_region = m_region;
+    m_region = region;
 }
 void Particle::check_moving(){
     if(m_vel[0] == 0.0f && m_vel[1] == 0.0f)

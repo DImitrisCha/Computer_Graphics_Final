@@ -19,7 +19,8 @@ private:
     float* m_pos;
     float* m_vel;
     float* m_color;
-    float m_start_time;
+    int m_region;
+    int m_prev_region;
     bool m_moving;
     void check_moving();
 public:
@@ -36,6 +37,9 @@ public:
     void set_gravity(float);
     bool checkCollision(Particle &);
     bool checkCollision(Wall &);
+    int get_region();
+    int get_prev_region();
+    void set_region(int);
 };
 
 #endif /* Particle_hpp */

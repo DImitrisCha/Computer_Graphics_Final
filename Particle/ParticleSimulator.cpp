@@ -15,7 +15,7 @@ Feedback: There was a lot of self-teaching and trial and error which was fun but
 
 #include <stdio.h>
 
-#include "Particle.hpp"
+#include "Box.hpp"
 #include <vector>
 #ifdef __APPLE__
 #  include <GL/glew.h>
@@ -91,20 +91,12 @@ void drawScene(void)
         float* curr_color = particles[i]->get_color();
             
         for (int j = 0; j < walls.size(); j++) {
-            if(particles[i]->checkCollision(*walls[j])){
-//                std::cout << "particle speed: (" << particles[i]->get_vel()[0] << ", " << particles[i]->get_vel()[1] << "), particle position: (" << particles[i]->get_position()[0] << ", " << particles[i]->get_position()[1] << ") wall: (" << walls[j]->get_pos()[0] << ", " << walls[j]->get_pos()[1] << ") wall collision \n";
-                
-            }
+            particles[i]->checkCollision(*walls[j]);
         }
         
         for (int k = 0; k < particles.size(); k++){
-            if (i == k){
-                continue;
-            }
-            else{
-                if(particles[i]->checkCollision(*particles[k]))
-                    std::cout << "particle collision \n";
-            }
+            if (k != i)
+                particles[i]->checkCollision(*particles[k]);
         }
         
         glPushMatrix();

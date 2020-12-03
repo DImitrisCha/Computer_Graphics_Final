@@ -144,6 +144,8 @@ void keyboard(unsigned char key, int x, int y) {
     switch (key) {
         case 27: // Escape key
             exit(0); break;
+        case 'a':
+            createParticles(50);
         case 'f':
             float randMax =  1 / (float)RAND_MAX;
             for (int i = 0; i < particles.size(); i++) {
@@ -187,7 +189,7 @@ int main(int argc, char* argv[])
     float r_2 = 0.6f;
     particles.push_back(new Particle(pos_2, vel_2, gravity, color_2, r_2));
     
-//    createParticles(50); // initial 'batch' of particles
+     // initial 'batch' of particles
     glutDisplayFunc(drawScene);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);

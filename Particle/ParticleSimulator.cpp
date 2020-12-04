@@ -15,8 +15,6 @@ Feedback: There was a lot of self-teaching and trial and error which was fun but
 
 #include <stdio.h>
 
-#include "Box.hpp"
-#include <vector>
 #ifdef __APPLE__
 #  include <GL/glew.h>
 #  include <GL/freeglut.h>
@@ -26,6 +24,7 @@ Feedback: There was a lot of self-teaching and trial and error which was fun but
 #endif
 
 #define _USE_MATH_DEFINES
+#include "Box.hpp"
 #include <cmath>
 #include <math.h>
 #include <iostream>
@@ -38,7 +37,6 @@ float win_width = 512;
 float win_height = 512;
 int avg_fps = 60; float fps = 0; int frames = 0;
 float gravity = -0.01f;
-float t = 0;
 float delta_time;
 vector<Particle*> particles;
 vector<Wall*> walls;
@@ -59,7 +57,7 @@ void init(void) {
 void calculateFPS(){
     fps += 1000/delta_time;
     frames ++;
-    // averages out FPS for the last 30 frames
+    // Averages out FPS for the last 30 frames
     if(frames == 30){
         avg_fps = fps/frames;
         fps = 0; frames = 0;
@@ -67,6 +65,7 @@ void calculateFPS(){
     }
 }
 
+// Creates n amount of particles and adds them particles vector
 void createParticles(int n){
     for(int i = 0; i < n; i++){
         particles.push_back(new Particle()); //add new particle to the vector
@@ -88,26 +87,27 @@ void drawScene(void)
     glLoadIdentity();
     
     for (int i = 0; i < particles.size(); i++) {
-        float* curr_location = particles[i]->move();
-        float* curr_color = particles[i]->get_color();
-        
+        // Cycles through available regions to determine what region this Particle belongs to
         for(int j = 0; j < regions.size(); j++){
             regions[j]->update_box(particles[i]);
         }
-              
+        
+        // Gets set of all Particles in this Particle's region and checks for collision
         int region = particles[i]->get_region();
         set<Particle*> close_particles = regions[region]->get_included();
-        std::cout << close_particles.size() << "\n";
+        for (auto particle: close_particles){
+            if(particles[i] != particle)
+                particles[i]->checkCollision(*particle);
+        }
         
-        
+        // Cycles through walls and checks for collision
         for (int j = 0; j < walls.size(); j++) {
             particles[i]->checkCollision(*walls[j]);
         }
         
-        for (auto particle: close_particles){
-            particles[i]->checkCollision(*particle);
-        }
-
+        // Updates particle position and gets x,y,z coordinates
+        float* curr_location = particles[i]->move();
+        float* curr_color = particles[i]->get_color();
         
         glPushMatrix();
             
@@ -135,8 +135,6 @@ void reshape(int w, int h)
 
 void idle() {
     calculateFPS();
-    t += 0.1;
-    
     glutPostRedisplay();
 }
 
@@ -145,7 +143,7 @@ void keyboard(unsigned char key, int x, int y) {
         case 27: // Escape key
             exit(0); break;
         case 'a':
-            createParticles(50);
+            createParticles(5);
         case 'f':
             float randMax =  1 / (float)RAND_MAX;
             for (int i = 0; i < particles.size(); i++) {
@@ -167,29 +165,30 @@ int main(int argc, char* argv[])
     
     init();
     
-    regions.push_back(new Box(0.0, 10.0, 10.0, 20.0, 0)); //top-left
-    regions.push_back(new Box(10.0, 20.0, 10.0, 20.0, 1)); //top-right
-    regions.push_back(new Box(0.0, 10.0, 0.0, 10.0, 2)); //bot-left
-    regions.push_back(new Box(10.0, 20.0, 0.0, 10.0, 3)); //bot-right
+    // Set up regions, dividing the scene roughly into quarters that overlap
+    regions.push_back(new Box(0.0, 12.0, 8.0, 20.0, 0)); //top-left
+    regions.push_back(new Box(8.0, 20.0, 8.0, 20.0, 1)); //top-right
+    regions.push_back(new Box(0.0, 12.0, 0.0, 12.0, 2)); //bot-left
+    regions.push_back(new Box(8.0, 20.0, 0.0, 12.0, 3)); //bot-right
     
+    // Set up walls around the scene
     walls.push_back(new Wall((float[3]) {0.0f, 20.0f, 0.0f}, true)); //top
     walls.push_back(new Wall((float[3]) {20.0f, 0.0f, 0.0f}, false)); //right
     walls.push_back(new Wall((float[3]) {0.0f, 0.0f, 0.0f}, true)); //bottm
     walls.push_back(new Wall((float[3]) {0.0f, 0.0f, 0.0f}, false)); //left
     
-    float pos_1[3] = {1.0f, 10.0f, 0.0f};
-    float vel_1[3] = {0.3f, 0.0f, 0.0f};
+    // Set up two initial red and blue particles
+    float pos_1[3] = {1.0f, 5.0f, 0.0f};
+    float vel_1[3] = {0.1f, 0.0f, 0.0f};
     float color_1[3] = {0, 0, 1};
     float r_1 = 0.5f;
     particles.push_back(new Particle(pos_1, vel_1, gravity, color_1, r_1));
-
-    float pos_2[3] = {19.0f, 10.0f, 0.0f};
+    float pos_2[3] = {19.0f, 5.0f, 0.0f};
     float vel_2[3] = {-0.1f, 0.0f, 0.0f};
     float color_2[3] = {1, 0, 0};
     float r_2 = 0.6f;
     particles.push_back(new Particle(pos_2, vel_2, gravity, color_2, r_2));
     
-     // initial 'batch' of particles
     glutDisplayFunc(drawScene);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);

@@ -1,15 +1,9 @@
 /*
-This file simulates the movement of particles over time.
+ This file simulates the movement of particles over time and their
+ interactions with each other and with their environment.
  
-Author: Miguel Donado
-Date: October 12, 2020
-Time spent: 8 hours
-Collaborators: Ariel Chung, Nic Dillon, Katie Turner
-Feedback: There was a lot of self-teaching and trial and error which was fun but made
-          me feel lost at certain points. For me, the hardest part was to get started
-          but after that most of the document made sense. The part on finding the FPS
-          and 'resetting' the particles wasn't super clear right away but that might
-          be me not reading the hand out carefully.
+ Author: Miguel Donado & Dimitrios Chavouzis
+ Date: December 8, 2020
  
 */
 
@@ -143,11 +137,13 @@ void keyboard(unsigned char key, int x, int y) {
         case 27: // Escape key
             exit(0); break;
         case 'a':
+            // adds 5 new randomly generated particles
             createParticles(5);
         case 'f':
-            float randMax =  1 / (float)RAND_MAX;
+            // assigns random velocities to all particles
+            float randSpeed =  (float)rand() / (float)RAND_MAX;
             for (int i = 0; i < particles.size(); i++) {
-                particles[i]->set_vel(randMax * (float)rand() - 0.5f, randMax * (float)rand());
+                particles[i]->set_vel(randSpeed - 0.5f, randSpeed - 0.2f);
             }
     }
     
@@ -172,7 +168,6 @@ int main(int argc, char* argv[])
     regions.push_back(new Box(8.0, 20.0, 0.0, 12.0, 3)); //bot-right
     
     // Set up walls around the scene
-    walls.push_back(new Wall((float[3]) {0.0f, 20.0f, 0.0f}, true)); //top
     walls.push_back(new Wall((float[3]) {20.0f, 0.0f, 0.0f}, false)); //right
     walls.push_back(new Wall((float[3]) {0.0f, 0.0f, 0.0f}, true)); //bottm
     walls.push_back(new Wall((float[3]) {0.0f, 0.0f, 0.0f}, false)); //left

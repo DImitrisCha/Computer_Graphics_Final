@@ -27,15 +27,18 @@ Particle::Particle()
     m_pos = new float[3];
     m_vel = new float[3];
     m_color = new float[3];
+    
     for(int i = 0; i < 3; i++){
-        m_pos[i] = (float)rand() * randMax;
         m_color[i] = (float)rand() * randMax;
-        m_vel[i] = 0.0f;
+        m_pos[i] = (float)rand() * randMax * 18;
+        m_vel[i] = -0.05f + 0.05f * (float)rand() * randMax;
     }
-    m_pos[0] *= 18; // spreads out the randomly generated x value
-    m_pos[1] += 10;
-    m_vel[0] = -0.05f + 0.05f * (float)rand() * randMax;
-    m_vel[1] = 0.1f * (float)rand() * randMax;
+    
+    // assigns 0 to the z-values
+    m_pos[2] = 0.0f;
+    m_vel[2] = 0.0f;
+    
+    // sets arbitrary gravity, friction, and region values
     m_gravity = -0.01f;
     m_friction = 1 + m_gravity;
     m_region = -1; m_prev_region = -1;
@@ -99,14 +102,22 @@ void Particle::set_vel(float vel_x, float vel_y){
 
 /* Updates x,y coordinates based on x,y velocities*/
 float* Particle::move(void){
+    // accelerates particle if it's moving
     if(check_moving())
         m_vel[1] += m_gravity;
     
+    // adds velocity on both axis
     m_pos[1] += m_vel[1];
     m_pos[0] += m_vel[0];
     
+    // renders particle on screen if a few pixels off
     if(m_pos[1] < m_radius)
         m_pos[1] = m_radius;
+    
+    if(m_pos[0] < m_radius)
+        m_pos[0] = m_radius;
+    else if(m_pos[0] > 20)
+        m_pos[0] = 20 - m_radius;
     
     return m_pos;
 }
